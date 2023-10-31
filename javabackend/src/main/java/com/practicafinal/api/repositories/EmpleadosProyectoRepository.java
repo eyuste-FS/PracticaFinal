@@ -1,4 +1,4 @@
 package com.practicafinal.api.repositories;
 
-public class EmpleadoProyectoRepository {
+public class EmpleadosProyectoRepository {
 }

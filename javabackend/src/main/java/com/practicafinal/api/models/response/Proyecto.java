@@ -5,32 +5,32 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity(name = "Proyecto")
-@Table(name = "proyecto")
+@Entity
+@Table(name = "PR_PROYECTO")
 public class Proyecto {
 
     @Id
     @SequenceGenerator(name = "proyecto-sequence", sequenceName = "proyecto-sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proyecto-sequence")
-    @Column(name = "id_proyecto", nullable = false, updatable = false, columnDefinition = "INT(5)")
+    @Column(name = "ID_PROYECTO", nullable = false, updatable = false, columnDefinition = "INT(5)")
     private Long idProyecto;
 
-    @Column(name = "tx_descripcion", columnDefinition = "VARCHAR(125)", nullable = false)
+    @Column(name = "TX_DESCRIPCION", columnDefinition = "VARCHAR(125)", nullable = false)
     private String txDescripcion;
 
-    @Column(name = "f_inicio", columnDefinition = "DATE", nullable = false)
+    @Column(name = "F_INICIO", columnDefinition = "DATE", nullable = false)
     private LocalDate fInicio;
 
-    @Column(name = "f_fin", columnDefinition = "DATE")
+    @Column(name = "F_FIN", columnDefinition = "DATE")
     private LocalDate fFin;
 
-    @Column(name = "f_baja", columnDefinition = "DATE")
+    @Column(name = "F_BAJA", columnDefinition = "DATE")
     private LocalDate fBaja;
 
-    @Column(name = "tx_lugar", columnDefinition = "VARCHAR(30)")
+    @Column(name = "TX_LUGAR", columnDefinition = "VARCHAR(30)")
     private String txLugar;
 
-    @Column(name = "tx_observaciones", columnDefinition = "VARCHAR(300)")
+    @Column(name = "TX_OBSERVACIONES", columnDefinition = "VARCHAR(300)")
     private String txObservaciones;
 
     public Proyecto() {

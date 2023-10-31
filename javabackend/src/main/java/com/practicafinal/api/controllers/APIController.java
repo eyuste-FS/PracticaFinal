@@ -3,9 +3,9 @@ package com.practicafinal.api.controllers;
 import com.practicafinal.api.models.request.EmpleadoModelRequest;
 import com.practicafinal.api.models.request.ProyectoModelRequest;
 import com.practicafinal.api.models.response.Empleado;
-import com.practicafinal.api.models.response.EmpleadoProyecto;
+import com.practicafinal.api.models.response.EmpleadosProyecto;
 import com.practicafinal.api.models.response.Proyecto;
-import com.practicafinal.api.repositories.EmpleadoProyectoRepository;
+import com.practicafinal.api.repositories.EmpleadosProyectoRepository;
 import com.practicafinal.api.repositories.EmpleadoRepository;
 import com.practicafinal.api.repositories.ProyectoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class APIController {
     ProyectoRepository proyectoRepository;
 
     @Autowired
-    EmpleadoProyectoRepository empleadoProyectoRepository;
+    EmpleadosProyectoRepository empleadosProyectoRepository;
 
     /*
     * GET
@@ -50,7 +50,7 @@ public class APIController {
     }
 
     @GetMapping(path = "/proyecto/{proyecto_id}/empleado/")
-    public ResponseEntity<List<EmpleadoProyecto>> getEmpleadosProyecto(
+    public ResponseEntity<List<EmpleadosProyecto>> getEmpleadosProyecto(
             @PathVariable int proyecto_id){
         //TODO
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,7 +61,7 @@ public class APIController {
     * */
 
     @PostMapping(path = "proyecto/{proyecto_id}/empleado/{empleado_id}")
-    public ResponseEntity<EmpleadoProyecto> postAsignarEmpleadoProyecto(
+    public ResponseEntity<EmpleadosProyecto> postAsignarEmpleadoProyecto(
             @PathVariable int proyecto_id,
             @PathVariable int empleado_id){
         //TODO

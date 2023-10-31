@@ -5,50 +5,50 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity(name = "Empleado")
-@Table(name = "empleado")
+@Entity
+@Table(name = "EM_EMPLEADO")
 public class Empleado {
 
     @Id
     @SequenceGenerator(name = "empleado-sequence", sequenceName = "empleado-sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "empleado-sequence")
-    @Column(name = "id_empleado", nullable = false, updatable = false, columnDefinition = "INT(7)")
+    @Column(name = "ID_EMPLEADO", nullable = false, updatable = false, columnDefinition = "INT(7)")
     private Long idEmpleado;
 
-    @Column(name = "tx_nif", columnDefinition = "VARCHAR(9)")
+    @Column(name = "TX_NIF", columnDefinition = "VARCHAR(9)")
     private String txNif;
 
-    @Column(name = "tx_nombre", columnDefinition = "VARCHAR(30)", nullable = false)
+    @Column(name = "TX_NOMBRE", columnDefinition = "VARCHAR(30)", nullable = false)
     private String txNombre;
 
-    @Column(name = "tx_apellido1", columnDefinition = "VARCHAR(40)", nullable = false)
+    @Column(name = "TX_APELLIDO1", columnDefinition = "VARCHAR(40)", nullable = false)
     private String txApellido1;
 
-    @Column(name = "tx_apellido2", columnDefinition = "VARCHAR(40)", nullable = false)
+    @Column(name = "TX_APELLIDO2", columnDefinition = "VARCHAR(40)", nullable = false)
     private String txApellido2;
 
-    @Column(name = "f_nacimiento", columnDefinition = "DATE", nullable = false)
+    @Column(name = "F_NACIMIENTO", columnDefinition = "DATE", nullable = false)
     private LocalDate fNacimiento;
 
-    @Column(name = "n_telefono1", columnDefinition = "VARCHAR(12)", nullable = false)
+    @Column(name = "N_TELEFONO1", columnDefinition = "VARCHAR(12)", nullable = false)
     private String nTelefono1;
 
-    @Column(name = "n_telefono2", columnDefinition = "VARCHAR(12)", nullable = false)
+    @Column(name = "N_TELEFONO2", columnDefinition = "VARCHAR(12)", nullable = false)
     private String nTelefono2;
 
-    @Column(name = "tx_email", columnDefinition = "VARCHAR(40)", nullable = false)
+    @Column(name = "TX_EMAIL", columnDefinition = "VARCHAR(40)", nullable = false)
     private String txEmail;
 
-    @Column(name = "f_alta", columnDefinition = "DATE", nullable = false)
+    @Column(name = "F_ALTA", columnDefinition = "DATE", nullable = false)
     private LocalDate fAlta;
 
-    @Column(name = "f_baja", columnDefinition = "DATE")
+    @Column(name = "F_BAJA", columnDefinition = "DATE")
     private LocalDate fBaja;
 
-    @Column(name = "cx_edocivil", columnDefinition = "CHAR(1)", nullable = false)
+    @Column(name = "CX_EDOCIVIL", columnDefinition = "CHAR(1)", nullable = false)
     private char cxEdocivil;
 
-    @Column(name = "b_servmilitar", columnDefinition = "CHAR(1)", nullable = false)
+    @Column(name = "B_SERVMILITAR", columnDefinition = "CHAR(1)", nullable = false)
     private char bServmilitar;
 
     public Empleado() {

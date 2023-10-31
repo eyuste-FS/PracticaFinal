@@ -82,7 +82,7 @@ Erik Yuste
 
 
 - 2.2 Alta de proyectos (página)
-    - 2.2.1 Consiste en un formulario mono registro, para insertar un nuevo empleado con los campos:
+    - 2.2.1 Consiste en un formulario mono registro, para insertar un nuevo proyecto con los campos:
         - Descripción
         - Fecha de inicio
         - Fecha de finalización
@@ -116,10 +116,10 @@ Erik Yuste
             - Se informará al usuario con el mensaje:
                 - ‘No se puede dar de baja el proyecto DESCRIPCIÓN DEL PROYECTO porque tiene asignado al menos un recurso’
 
-- 2.4 Asignar empleados a proyectos. En la página de consulta (RF-2.1) hey un botón Asignar Empleados. Al pulsarlo se accede a la ventana:
+- 2.4 Asignar empleados a proyectos. En la página de consulta (RF-2.1) hay un botón Asignar Empleados. Al pulsarlo se accede a la ventana:
     - 2.4.1 Contiene:
         - 2.4.1.1 Lista desplegable con la descripción de los proyectos que no estén dados de baja.
-        - 2.4.1.2 Bloque multiregistro con nombre y apelldidos de empleados que no estén dados de baja.
+        - 2.4.1.2 Bloque multiregistro con nombre y apellidos de empleados que no estén dados de baja.
 
     - 2.4.2 Al seleccionar un proyecto de la lista:
         - 2.4.2.1 Aparecen los empleados no dados de baja.
@@ -151,8 +151,8 @@ Erik Yuste
     - 3.2.4 Proyectos y Empleados
     - 3.2.5 Distribución del número de proyectos a los que están asignados los empleados en activo. 
         - Ejemplo: 
-            - Personas asignadas a 1 proyecto: 54, 
-            - Personas asignadas a 2 proyectos: 12,
+            - Personas asignadas a 1 proyecto: 54 
+            - Personas asignadas a 2 proyectos: 12
             - Personas asignadas a 3 proyectos: 2
     - 3.2.6 Top 5 proyectos con más personas asignadas
     - 3.2.7 Lista de proyectos sin personas asignadas (detección de anomalía) 

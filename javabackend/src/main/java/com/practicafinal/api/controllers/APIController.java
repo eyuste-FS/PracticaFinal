@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path="/")
@@ -67,7 +68,7 @@ public class APIController {
     public ResponseEntity<List<EmpleadosProyecto>> getEmpleadosProyecto(
             @PathVariable Long proyecto_id){
 
-        List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacion(proyecto_id);
+        List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacionProyecto(proyecto_id);
 
         return new ResponseEntity<>(empleadosProyecto, HttpStatus.OK);
     }
@@ -82,12 +83,20 @@ public class APIController {
             @Validated @RequestBody ActualizacionAsignacionModelRequest asignacion){
 
         Proyecto proyecto = proyectoRepository.getReferenceById(proyecto_id);
+        if (proyecto.getfBaja() != null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
 
         ArrayList<EmpleadosProyecto> altas = new ArrayList<>();
         for (Long alta: asignacion.getEmpleadosAlta()){
             try{
                 boolean existia = true;
                 Empleado empleado = empleadoRepository.getReferenceById(alta);
+
+                if (empleado.getFBaja() != null){
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+
                 EmpleadosProyectoId nuevaAsignacion = new EmpleadosProyectoId(empleado, proyecto);
 
                 try{ // Comprobar si ya existia
@@ -107,9 +116,14 @@ public class APIController {
         }
 
         ArrayList<EmpleadosProyecto> bajas = new ArrayList<>();
-        for (Long baja: asignacion.getEmpleadosAlta()){
+        for (Long baja: asignacion.getEmpleadosBaja()){
             try{
                 Empleado empleado = empleadoRepository.getReferenceById(baja);
+
+                if (empleado.getFBaja() != null){
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+
                 EmpleadosProyecto ep =  empleadosProyectoRepository.getReferenceById(
                         new EmpleadosProyectoId(empleado, proyecto));
                 bajas.add(ep);
@@ -203,17 +217,57 @@ public class APIController {
     * */
 
     @DeleteMapping(path = "/empleado/{empleado_id}")
-    public ResponseEntity<Empleado> deleteEmpleado(
-            @PathVariable int empleado_id){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> deleteEmpleado(
+            @PathVariable Long empleado_id){
+
+        Empleado empleado = null;
+        try{
+             empleado = empleadoRepository.getReferenceById(empleado_id);
+        }catch (Exception exception){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<EmpleadosProyecto> proyectos = empleadosProyectoRepository.getAsignacionEmpleado(empleado_id);
+        if(proyectos.size() > 0){
+            String proyectoStr = String.join(
+                    ", ",
+                    proyectos.stream()
+                            .map(EmpleadosProyecto::getEmpleadosProyectoId)
+                            .map(EmpleadosProyectoId::getIdProyecto)
+                            .map(Proyecto::getTxDescripcion)
+                            .collect(Collectors.toList()));
+            String err = "No se puede dar de baja al empleado {} {} {} porque está asignado a el/los proyecto/s {}".formatted(
+                    empleado.getTxNombre(), empleado.getTxApellido1(), empleado.getTxApellido2(), proyectoStr);
+            return new ResponseEntity<>(err, HttpStatus.CONFLICT);
+        }
+
+        empleado.setFBaja(LocalDate.now());
+        empleadoRepository.save(empleado);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/proyecto/{proyecto_id}")
-    public ResponseEntity<Proyecto> deleteProyecto(
-            @PathVariable int proyecto_id){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> deleteProyecto(
+            @PathVariable Long proyecto_id){
+
+        Proyecto proyecto = null;
+        try{
+            proyecto = proyectoRepository.getReferenceById(proyecto_id);
+        }catch (Exception exception){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(empleadosProyectoRepository.getAsignacionProyecto(proyecto_id).size() > 0){
+            String err = "No se puede dar de baja el proyecto {} porque tiene asignado al menos un recurso".formatted(
+                    proyecto.getTxDescripcion());
+            return new ResponseEntity<>(err, HttpStatus.CONFLICT);
+        }
+
+        proyecto.setfBaja(LocalDate.now());
+        proyectoRepository.save(proyecto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.practicafinal.api.controllers;
 
+import com.practicafinal.api.embeddables.EmpleadosProyectoId;
 import com.practicafinal.api.models.request.ActualizacionAsignacionModelRequest;
 import com.practicafinal.api.models.request.EmpleadoModelRequest;
 import com.practicafinal.api.models.request.ProyectoModelRequest;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -74,11 +77,51 @@ public class APIController {
     * */
 
     @PostMapping(path = "proyecto/{proyecto_id}/empleado/")
-    public ResponseEntity<EmpleadosProyecto> postAsignarEmpleadoProyecto(
-            @PathVariable int proyecto_id,
+    public ResponseEntity postAsignarEmpleadoProyecto(
+            @PathVariable Long proyecto_id,
             @Validated @RequestBody ActualizacionAsignacionModelRequest asignacion){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        Proyecto proyecto = proyectoRepository.getReferenceById(proyecto_id);
+
+        ArrayList<EmpleadosProyecto> altas = new ArrayList<>();
+        for (Long alta: asignacion.getEmpleadosAlta()){
+            try{
+                boolean existia = true;
+                Empleado empleado = empleadoRepository.getReferenceById(alta);
+                EmpleadosProyectoId nuevaAsignacion = new EmpleadosProyectoId(empleado, proyecto);
+
+                try{ // Comprobar si ya existia
+                    empleadosProyectoRepository.getReferenceById(nuevaAsignacion);
+                }catch (Exception exception){
+                    existia = false;
+                }
+
+                if (existia){
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
+
+                altas.add(new EmpleadosProyecto(nuevaAsignacion, LocalDate.now()));
+            } catch (Exception exception){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+        ArrayList<EmpleadosProyecto> bajas = new ArrayList<>();
+        for (Long baja: asignacion.getEmpleadosAlta()){
+            try{
+                Empleado empleado = empleadoRepository.getReferenceById(baja);
+                EmpleadosProyecto ep =  empleadosProyectoRepository.getReferenceById(
+                        new EmpleadosProyectoId(empleado, proyecto));
+                bajas.add(ep);
+            } catch (Exception exception){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+        empleadosProyectoRepository.saveAll(altas);
+        empleadosProyectoRepository.deleteAll(bajas);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /*

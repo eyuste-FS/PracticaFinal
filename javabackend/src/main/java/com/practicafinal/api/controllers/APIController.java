@@ -131,15 +131,70 @@ public class APIController {
     @PutMapping(path = "/empleado")
     public ResponseEntity<Empleado> putEmpleado(
             @Validated @RequestBody EmpleadoModelRequest empleadoModelRequest){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        char edoCivil = ' ';
+        String edoCivilStr = empleadoModelRequest.getEstadoCivil();
+        if (edoCivilStr.equals("Casado")) {
+            edoCivil = 'C';
+        } else if (edoCivilStr.equals("Soltero")) {
+            edoCivil = 'S';
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        char sMilitar = ' ';
+        String sMilitarStr = empleadoModelRequest.getServicioMilitar();
+        if (sMilitarStr.equals("No")) {
+            sMilitar = 'N';
+        } else if (sMilitarStr.equals("Si")) {
+            sMilitar = 'S';
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        Empleado nuevoEmpleado = new Empleado(
+                empleadoModelRequest.getNif(),
+                empleadoModelRequest.getNombre(),
+                empleadoModelRequest.getPrimerApellido(),
+                empleadoModelRequest.getSegundoApellido(),
+                empleadoModelRequest.getFechaNacimiento(),
+                empleadoModelRequest.getTelefono1(),
+                empleadoModelRequest.getTelefono2(),
+                empleadoModelRequest.getEmail(),
+                empleadoModelRequest.getFechaAlta(),
+                null,
+                edoCivil,
+                sMilitar);
+
+        try{
+            empleadoRepository.save(nuevoEmpleado);
+        }catch (Exception exception){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(nuevoEmpleado, HttpStatus.OK);
     }
 
     @PutMapping(path = "/proyecto")
     public ResponseEntity<Proyecto> putProyecto(
             @Validated @RequestBody ProyectoModelRequest proyectoModelRequest){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        Proyecto nuevoProyecto = new Proyecto(
+                proyectoModelRequest.getDescripcion(),
+                proyectoModelRequest.getFecha_inicio(),
+                proyectoModelRequest.getFecha_final(),
+                null,
+                proyectoModelRequest.getLugar(),
+                proyectoModelRequest.getObservaciones());
+
+        try{
+            proyectoRepository.save(nuevoProyecto);
+        }catch (Exception exception){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(nuevoProyecto, HttpStatus.OK);
     }
 
 

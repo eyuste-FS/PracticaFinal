@@ -36,8 +36,7 @@ public class Proyecto {
     public Proyecto() {
     }
 
-    public Proyecto(Long idProyecto, String txDescripcion, LocalDate fInicio, LocalDate fFin, LocalDate fBaja, String txLugar, String txObservaciones) {
-        this.idProyecto = idProyecto;
+    public Proyecto(String txDescripcion, LocalDate fInicio, LocalDate fFin, LocalDate fBaja, String txLugar, String txObservaciones) {
         this.txDescripcion = txDescripcion;
         this.fInicio = fInicio;
         this.fFin = fFin;

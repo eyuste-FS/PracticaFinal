@@ -9,14 +9,10 @@ Erik Yuste
 
 - empleado/
     - Con paginación (?page=N)
-    - Ordenado (?sort=atributo)
-        - Ver PUT
     - Exclusivamente aquellos sin fecha de baja
 
 - proyecto/
     - Con paginación (?page=N)
-    - Ordenado (?sort=atributo)
-        - Ver PUT
     - Exclusivamente aquellos sin fecha de baja
 
 - proyecto/[proyecto_id]/empleado/
@@ -26,8 +22,11 @@ Erik Yuste
 
 ## POST
 
-- proyecto/[proyecto_id]/empleado/[empleado_id]
-    - Asigna un empleado a un proyecto
+- proyecto/[proyecto_id]/empleado/
+    - Actualiza los empleados asignados a un proyecto
+    - En el cuerpo (solo se pasan los modificados):
+        - "empleados_baja": Lista con las id de empleado que dar de baja del proyecto
+        - "empleados_alta": Lista con las id de empleado que dar de alta en el proyecto
 
 
 ## PUT

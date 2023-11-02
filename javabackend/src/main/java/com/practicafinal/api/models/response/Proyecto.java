@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "PR_PROYECTO")
+@Entity(name = "PR_PROYECTOS")
+@Table(name = "PR_PROYECTOS")
 public class Proyecto {
 
     @Id
@@ -117,7 +117,7 @@ public class Proyecto {
 
 /*
    ID_PROYECTO 				INT(5) AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   TX_DESCRIPCIÓN 			VARCHAR(125) NOT NULL,
+   TX_DESCRIPCION 			VARCHAR(125) NOT NULL,
    F_INICIO 				DATE NOT NULL,
    F_FIN 					DATE,
    F_BAJA					DATE,

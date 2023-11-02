@@ -8,9 +8,6 @@ import java.util.List;
 
 public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
 
-    @Query(value = "select e from EM_EMPLEADOS where F_BAJA is NULL order by ID_EMPLEADO limit 10 offset (?1 * 10)")
-    List<Empleado> getEmpleados(int page);
-
-    @Query(value = "select e from EM_EMPLEADOS where F_BAJA is NULL order by ID_EMPLEADO limit 10")
-    List<Empleado> getEmpleados();
+    @Query(value = "select e from EM_EMPLEADOS e where e.fBaja is NULL order by e.idEmpleado limit ?1 offset ?2")
+    List<Empleado> getEmpleados(int limit, int offset);
 }

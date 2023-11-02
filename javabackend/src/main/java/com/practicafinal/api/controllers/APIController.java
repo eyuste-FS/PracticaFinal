@@ -46,7 +46,7 @@ public class APIController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<Empleado> empleados = empleadoRepository.getEmpleados(page);
+        List<Empleado> empleados = empleadoRepository.getEmpleados(10, page * 10);
 
         return new ResponseEntity<>(empleados, HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class APIController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<Proyecto> proyectos = proyectoRepository.getProyectos(page);
+        List<Proyecto> proyectos = proyectoRepository.getProyectos(10, 10 *page);
 
         return new ResponseEntity<>(proyectos, HttpStatus.OK);
     }
@@ -236,7 +236,8 @@ public class APIController {
                             .map(EmpleadosProyectoId::getIdProyecto)
                             .map(Proyecto::getTxDescripcion)
                             .collect(Collectors.toList()));
-            String err = "No se puede dar de baja al empleado {} {} {} porque está asignado a el/los proyecto/s {}".formatted(
+            String err = String.format(
+                    "No se puede dar de baja al empleado %s %s %s porque está asignado a el/los proyecto/s %s",
                     empleado.getTxNombre(), empleado.getTxApellido1(), empleado.getTxApellido2(), proyectoStr);
             return new ResponseEntity<>(err, HttpStatus.CONFLICT);
         }
@@ -259,7 +260,8 @@ public class APIController {
         }
 
         if(empleadosProyectoRepository.getAsignacionProyecto(proyecto_id).size() > 0){
-            String err = "No se puede dar de baja el proyecto {} porque tiene asignado al menos un recurso".formatted(
+            String err = String.format(
+                    "No se puede dar de baja el proyecto %s porque tiene asignado al menos un recurso",
                     proyecto.getTxDescripcion());
             return new ResponseEntity<>(err, HttpStatus.CONFLICT);
         }

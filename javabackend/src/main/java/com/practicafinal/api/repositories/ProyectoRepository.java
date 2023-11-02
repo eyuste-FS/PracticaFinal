@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface ProyectoRepository extends JpaRepository<Proyecto, Long> {
 
-    @Query(value = "select p from PR_PROYECTOS where F_BAJA is NULL order by ID_PROYECTO limit 10 offset (?1 * 10)")
-    List<Proyecto> getProyectos(int page);
+    @Query(value = "select p from PR_PROYECTOS p where p.fBaja is NULL order by p.idProyecto limit ?1 offset ?2")
+    List<Proyecto> getProyectos(int limit, int offset);
 
-    @Query(value = "select p from PR_PROYECTOS where F_BAJA is NULL order by ID_PROYECTO limit 10")
-    List<Proyecto> getProyectos();
+    @Query(value = "select p from PR_PROYECTOS p where p.fBaja is NULL")
+    List<Proyecto> getAllProyectos();
 
 }

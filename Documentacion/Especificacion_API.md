@@ -25,8 +25,8 @@ Erik Yuste
 - proyecto/[proyecto_id]/empleado/
     - Actualiza los empleados asignados a un proyecto
     - En el cuerpo (solo se pasan los modificados):
-        - "empleados_baja": Lista con las id de empleado que dar de baja del proyecto
-        - "empleados_alta": Lista con las id de empleado que dar de alta en el proyecto
+        - "empleadosBaja": Lista con las id de empleado que dar de baja del proyecto
+        - "empleadosAlta": Lista con las id de empleado que dar de alta en el proyecto
 
 
 ## PUT

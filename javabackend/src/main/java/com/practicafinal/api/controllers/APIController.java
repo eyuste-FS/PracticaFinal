@@ -1,5 +1,6 @@
 package com.practicafinal.api.controllers;
 
+import com.practicafinal.api.models.request.ActualizacionAsignacionModelRequest;
 import com.practicafinal.api.models.request.EmpleadoModelRequest;
 import com.practicafinal.api.models.request.ProyectoModelRequest;
 import com.practicafinal.api.models.response.Empleado;
@@ -35,35 +36,47 @@ public class APIController {
 
     @GetMapping(path = "/empleado")
     public ResponseEntity<List<Empleado>> getEmpleadosSinBaja(
-            @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "sort", defaultValue = "") String sort){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            @RequestParam(name = "page", defaultValue = "0") int page){
+
+        if (page < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Empleado> empleados = empleadoRepository.getEmpleados(page);
+
+        return new ResponseEntity<>(empleados, HttpStatus.OK);
     }
 
     @GetMapping(path = "/proyecto")
     public ResponseEntity<List<Proyecto>> getProyectosSinBaja(
-            @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "sort", defaultValue = "") String sort){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            @RequestParam(name = "page", defaultValue = "0") int page){
+
+        if (page < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Proyecto> proyectos = proyectoRepository.getProyectos(page);
+
+        return new ResponseEntity<>(proyectos, HttpStatus.OK);
     }
 
     @GetMapping(path = "/proyecto/{proyecto_id}/empleado/")
     public ResponseEntity<List<EmpleadosProyecto>> getEmpleadosProyecto(
-            @PathVariable int proyecto_id){
-        //TODO
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            @PathVariable Long proyecto_id){
+
+        List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacion(proyecto_id);
+
+        return new ResponseEntity<>(empleadosProyecto, HttpStatus.OK);
     }
 
     /*
     * POST
     * */
 
-    @PostMapping(path = "proyecto/{proyecto_id}/empleado/{empleado_id}")
+    @PostMapping(path = "proyecto/{proyecto_id}/empleado/")
     public ResponseEntity<EmpleadosProyecto> postAsignarEmpleadoProyecto(
             @PathVariable int proyecto_id,
-            @PathVariable int empleado_id){
+            @Validated @RequestBody ActualizacionAsignacionModelRequest asignacion){
         //TODO
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

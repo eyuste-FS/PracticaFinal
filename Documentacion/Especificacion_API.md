@@ -18,6 +18,23 @@ Erik Yuste
 - proyecto/[proyecto_id]/empleado/
     - Lista de empleados.
     - Incluye una columna booleana "Asignado" si el empleado está asignado al proyecto
+    - Retorna una lista de elementos con los atributos:
+        - idProyecto
+        - fAlta
+        - empleado
+            - idEmpleado
+            - txNif
+            - txNombre
+            - txApellido1
+            - txApellido2
+            - txEmail
+            - cxEdocivil
+            - fbaja
+            - fnacimiento
+            - falta
+            - ntelefono2
+            - ntelefono1
+            - bservmilitar
 
 
 ## POST
@@ -25,33 +42,33 @@ Erik Yuste
 - proyecto/[proyecto_id]/empleado/
     - Actualiza los empleados asignados a un proyecto
     - En el cuerpo (solo se pasan los modificados):
-        - "empleadosBaja": Lista con las id de empleado que dar de baja del proyecto
-        - "empleadosAlta": Lista con las id de empleado que dar de alta en el proyecto
+        - empleadosBaja: lista de identificadores de empleado
+        - empleadosAlta: lista de identificadores de empleado
 
 
 ## PUT
 
 - empleado/
     - Crea un nuevo empleado (y le da de alta con la fecha del sistema)
-    - Cuerpo (todos strings):
+    - Cuerpo (todos obligatorios y de tipo string):
         - nif
         - nombre
-        - primer_apellido
-        - segundo_apellido
-        - fecha_nacimiento
-        - fecha_alta
-        - telefono_1
-        - telefono_2
+        - primerApellido
+        - segundoApellido
+        - fechaNacimiento
+        - fechaAlta
+        - telefono1
+        - telefono2
         - email
-        - estado_civil [Soltero/Casado]
-        - servicio_militar [Si/No]
+        - estadoCivil [Soltero/Casado]
+        - servicioMilitar [Si/No]
 
 - proyecto/
     - Crea un nuevo proyecto (y le da de alta con la fecha del sistema)
-    - Cuerpo (todos strings):
+    - Cuerpo (todos de tipo string):
         - descripcion
         - fecha_inicio
-        - fecha_final
+        - fecha_final (opcional)
         - lugar
         - observaciones
 

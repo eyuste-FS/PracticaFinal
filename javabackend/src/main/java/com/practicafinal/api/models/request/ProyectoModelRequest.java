@@ -10,9 +10,9 @@ public class ProyectoModelRequest {
     private String descripcion;
 
     @NotNull
-    private LocalDate fecha_inicio;
+    private LocalDate fechaInicio;
 
-    private LocalDate fecha_final;
+    private LocalDate fechaFinal;
 
     @NotNull
     private String lugar;
@@ -23,10 +23,10 @@ public class ProyectoModelRequest {
     public ProyectoModelRequest() {
     }
 
-    public ProyectoModelRequest(String descripcion, LocalDate fecha_inicio, LocalDate fecha_final, String lugar, String observaciones) {
+    public ProyectoModelRequest(String descripcion, LocalDate fechaInicio, LocalDate fechaFinal, String lugar, String observaciones) {
         this.descripcion = descripcion;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_final = fecha_final;
+        this.fechaInicio = fechaInicio;
+        this.fechaFinal = fechaFinal;
         this.lugar = lugar;
         this.observaciones = observaciones;
     }
@@ -39,20 +39,20 @@ public class ProyectoModelRequest {
         this.descripcion = descripcion;
     }
 
-    public LocalDate getFecha_inicio() {
-        return fecha_inicio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFecha_inicio(LocalDate fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public LocalDate getFecha_final() {
-        return fecha_final;
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
     }
 
-    public void setFecha_final(LocalDate fecha_final) {
-        this.fecha_final = fecha_final;
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
     }
 
     public String getLugar() {
@@ -75,8 +75,8 @@ public class ProyectoModelRequest {
     public String toString() {
         return "ProyectoModelRequest{" +
                 "descripcion='" + descripcion + '\'' +
-                ", fecha_inicio=" + fecha_inicio +
-                ", fecha_final=" + fecha_final +
+                ", fecha_inicio=" + fechaInicio +
+                ", fecha_final=" + fechaFinal +
                 ", lugar='" + lugar + '\'' +
                 ", observaciones='" + observaciones + '\'' +
                 '}';

@@ -4,6 +4,7 @@ import com.practicafinal.api.embeddables.EmpleadosProyectoId;
 import com.practicafinal.api.models.request.ActualizacionAsignacionModelRequest;
 import com.practicafinal.api.models.request.EmpleadoModelRequest;
 import com.practicafinal.api.models.request.ProyectoModelRequest;
+import com.practicafinal.api.models.response.AsignacionEmpleadoProyecto;
 import com.practicafinal.api.models.response.Empleado;
 import com.practicafinal.api.models.response.EmpleadosProyecto;
 import com.practicafinal.api.models.response.Proyecto;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path="/")
+@RequestMapping(path = "/")
 public class APIController {
 
     @Autowired
@@ -35,12 +36,12 @@ public class APIController {
     EmpleadosProyectoRepository empleadosProyectoRepository;
 
     /*
-    * GET
-    * */
+     * GET
+     * */
 
     @GetMapping(path = "/empleado")
     public ResponseEntity<List<Empleado>> getEmpleadosSinBaja(
-            @RequestParam(name = "page", defaultValue = "0") int page){
+            @RequestParam(name = "page", defaultValue = "0") int page) {
 
         if (page < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -53,98 +54,126 @@ public class APIController {
 
     @GetMapping(path = "/proyecto")
     public ResponseEntity<List<Proyecto>> getProyectosSinBaja(
-            @RequestParam(name = "page", defaultValue = "0") int page){
+            @RequestParam(name = "page", defaultValue = "0") int page) {
 
         if (page < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<Proyecto> proyectos = proyectoRepository.getProyectos(10, 10 *page);
+        List<Proyecto> proyectos = proyectoRepository.getProyectos(10, 10 * page);
 
         return new ResponseEntity<>(proyectos, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/proyecto/{proyecto_id}/empleado/")
-    public ResponseEntity<List<EmpleadosProyecto>> getEmpleadosProyecto(
-            @PathVariable Long proyecto_id){
+    @GetMapping(path = "/proyecto/{proyecto_id}/empleado")
+    public ResponseEntity<List<AsignacionEmpleadoProyecto>> getEmpleadosProyecto(
+            @PathVariable Long proyecto_id) {
 
-        List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacionProyecto(proyecto_id);
+        if (!proyectoRepository.existsById(proyecto_id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        return new ResponseEntity<>(empleadosProyecto, HttpStatus.OK);
+        Proyecto proyecto = proyectoRepository.getReferenceById(proyecto_id);
+        List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacionProyecto(proyecto);
+
+        List<AsignacionEmpleadoProyecto> asignacionEmpleadoProyectos = empleadosProyecto
+                .stream()
+                .map(AsignacionEmpleadoProyecto::new)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(asignacionEmpleadoProyectos, HttpStatus.OK);
     }
 
     /*
-    * POST
-    * */
+     * POST
+     * */
 
-    @PostMapping(path = "proyecto/{proyecto_id}/empleado/")
-    public ResponseEntity postAsignarEmpleadoProyecto(
+    @PostMapping(path = "/proyecto/{proyecto_id}/empleado")
+    public ResponseEntity<String> postAsignarEmpleadoProyecto(
             @PathVariable Long proyecto_id,
-            @Validated @RequestBody ActualizacionAsignacionModelRequest asignacion){
+            @Validated @RequestBody ActualizacionAsignacionModelRequest asignacion) {
 
         Proyecto proyecto = proyectoRepository.getReferenceById(proyecto_id);
-        if (proyecto.getfBaja() != null){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if (proyecto.getfBaja() != null) {
+            return new ResponseEntity("El proyecto está dado de baja", HttpStatus.NOT_FOUND);
         }
 
         ArrayList<EmpleadosProyecto> altas = new ArrayList<>();
-        for (Long alta: asignacion.getEmpleadosAlta()){
-            try{
-                boolean existia = true;
-                Empleado empleado = empleadoRepository.getReferenceById(alta);
-
-                if (empleado.getFBaja() != null){
-                    return new ResponseEntity(HttpStatus.NOT_FOUND);
-                }
-
-                EmpleadosProyectoId nuevaAsignacion = new EmpleadosProyectoId(empleado, proyecto);
-
-                try{ // Comprobar si ya existia
-                    empleadosProyectoRepository.getReferenceById(nuevaAsignacion);
-                }catch (Exception exception){
-                    existia = false;
-                }
-
-                if (existia){
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
-                }
-
-                altas.add(new EmpleadosProyecto(nuevaAsignacion, LocalDate.now()));
-            } catch (Exception exception){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        for (Long alta : asignacion.getEmpleadosAlta()) {
+            if (!empleadoRepository.existsById(alta)) {
+                return new ResponseEntity<>(
+                        String.format("No se ha encontrado ningún empleado con id=%d", alta),
+                        HttpStatus.NOT_FOUND);
             }
+            Empleado empleado = empleadoRepository.getReferenceById(alta);
+
+            if (empleado.getFBaja() != null) {
+                return new ResponseEntity(
+                        String.format(
+                                "El empleado %s %s %s (id=%d) está dado de baja",
+                                empleado.getTxNombre(), empleado.getTxApellido1(),
+                                empleado.getTxApellido2(), empleado.getIdEmpleado()),
+                        HttpStatus.NOT_FOUND);
+            }
+
+            EmpleadosProyectoId nuevaAsignacion = new EmpleadosProyectoId(empleado, proyecto);
+
+            if (empleadosProyectoRepository.existsById(nuevaAsignacion)) {
+                return new ResponseEntity<>(
+                        String.format(
+                                "El empleado %s %s %s (id=%d) ya estaba dado de alta en este proyecto (id=%d)",
+                                empleado.getTxNombre(), empleado.getTxApellido1(),
+                                empleado.getTxApellido2(), empleado.getIdEmpleado(), proyecto_id),
+                        HttpStatus.CONFLICT);
+            }
+
+            altas.add(new EmpleadosProyecto(nuevaAsignacion, LocalDate.now()));
         }
 
         ArrayList<EmpleadosProyecto> bajas = new ArrayList<>();
-        for (Long baja: asignacion.getEmpleadosBaja()){
-            try{
-                Empleado empleado = empleadoRepository.getReferenceById(baja);
-
-                if (empleado.getFBaja() != null){
-                    return new ResponseEntity(HttpStatus.NOT_FOUND);
-                }
-
-                EmpleadosProyecto ep =  empleadosProyectoRepository.getReferenceById(
-                        new EmpleadosProyectoId(empleado, proyecto));
-                bajas.add(ep);
-            } catch (Exception exception){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        for (Long baja : asignacion.getEmpleadosBaja()) {
+            if (!empleadoRepository.existsById(baja)) {
+                return new ResponseEntity<>(String.format(
+                        "No se ha encontrado ningún empleado con id=%d", baja),
+                        HttpStatus.NOT_FOUND);
             }
+            Empleado empleado = empleadoRepository.getReferenceById(baja);
+
+            if (empleado.getFBaja() != null) {
+                return new ResponseEntity(
+                        String.format(
+                                "El empleado %s %s %s (id=%d) está dado de baja",
+                                empleado.getTxNombre(), empleado.getTxApellido1(),
+                                empleado.getTxApellido2(), empleado.getIdEmpleado()),
+                        HttpStatus.NOT_FOUND);
+            }
+
+            EmpleadosProyectoId epid = new EmpleadosProyectoId(empleado, proyecto);
+            if (!empleadosProyectoRepository.existsById(epid)) {
+                continue;
+                /*return new ResponseEntity<>(
+                        String.format(
+                                "No se ha encontrado ningún empleado con id=%d dado de alta en este proyecto",
+                                baja),
+                        HttpStatus.NOT_FOUND);*/
+            }
+            EmpleadosProyecto ep = empleadosProyectoRepository.getReferenceById(epid);
+            bajas.add(ep);
         }
 
         empleadosProyectoRepository.saveAll(altas);
         empleadosProyectoRepository.deleteAll(bajas);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     /*
-    * PUT
-    * */
+     * PUT
+     * */
 
     @PutMapping(path = "/empleado")
     public ResponseEntity<Empleado> putEmpleado(
-            @Validated @RequestBody EmpleadoModelRequest empleadoModelRequest){
+            @Validated @RequestBody EmpleadoModelRequest empleadoModelRequest) {
 
         char edoCivil = ' ';
         String edoCivilStr = empleadoModelRequest.getEstadoCivil();
@@ -152,7 +181,7 @@ public class APIController {
             edoCivil = 'C';
         } else if (edoCivilStr.equals("Soltero")) {
             edoCivil = 'S';
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -162,10 +191,9 @@ public class APIController {
             sMilitar = 'N';
         } else if (sMilitarStr.equals("Si")) {
             sMilitar = 'S';
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
 
         Empleado nuevoEmpleado = new Empleado(
                 empleadoModelRequest.getNif(),
@@ -181,9 +209,9 @@ public class APIController {
                 edoCivil,
                 sMilitar);
 
-        try{
+        try {
             empleadoRepository.save(nuevoEmpleado);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -192,43 +220,42 @@ public class APIController {
 
     @PutMapping(path = "/proyecto")
     public ResponseEntity<Proyecto> putProyecto(
-            @Validated @RequestBody ProyectoModelRequest proyectoModelRequest){
+            @Validated @RequestBody ProyectoModelRequest proyectoModelRequest) {
 
         Proyecto nuevoProyecto = new Proyecto(
                 proyectoModelRequest.getDescripcion(),
-                proyectoModelRequest.getFecha_inicio(),
-                proyectoModelRequest.getFecha_final(),
+                proyectoModelRequest.getFechaInicio(),
+                proyectoModelRequest.getFechaFinal(),
                 null,
                 proyectoModelRequest.getLugar(),
                 proyectoModelRequest.getObservaciones());
 
-        try{
+        try {
             proyectoRepository.save(nuevoProyecto);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(nuevoProyecto, HttpStatus.OK);
     }
 
-
     /*
-    * DELETE
-    * */
+     * DELETE
+     * */
 
     @DeleteMapping(path = "/empleado/{empleado_id}")
     public ResponseEntity<String> deleteEmpleado(
-            @PathVariable Long empleado_id){
+            @PathVariable Long empleado_id) {
 
         Empleado empleado = null;
-        try{
-             empleado = empleadoRepository.getReferenceById(empleado_id);
-        }catch (Exception exception){
+        try {
+            empleado = empleadoRepository.getReferenceById(empleado_id);
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<EmpleadosProyecto> proyectos = empleadosProyectoRepository.getAsignacionEmpleado(empleado_id);
-        if(proyectos.size() > 0){
+        List<EmpleadosProyecto> proyectos = empleadosProyectoRepository.getAsignacionEmpleado(empleado);
+        if (proyectos.size() > 0) {
             String proyectoStr = String.join(
                     ", ",
                     proyectos.stream()
@@ -245,21 +272,21 @@ public class APIController {
         empleado.setFBaja(LocalDate.now());
         empleadoRepository.save(empleado);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Empleado dado de baja", HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/proyecto/{proyecto_id}")
     public ResponseEntity<String> deleteProyecto(
-            @PathVariable Long proyecto_id){
+            @PathVariable Long proyecto_id) {
 
         Proyecto proyecto = null;
-        try{
+        try {
             proyecto = proyectoRepository.getReferenceById(proyecto_id);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(empleadosProyectoRepository.getAsignacionProyecto(proyecto_id).size() > 0){
+        if (empleadosProyectoRepository.getAsignacionProyecto(proyecto).size() > 0) {
             String err = String.format(
                     "No se puede dar de baja el proyecto %s porque tiene asignado al menos un recurso",
                     proyecto.getTxDescripcion());
@@ -269,7 +296,7 @@ public class APIController {
         proyecto.setfBaja(LocalDate.now());
         proyectoRepository.save(proyecto);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Proyecto dado de baja", HttpStatus.OK);
     }
 
 }

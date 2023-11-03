@@ -1,12 +1,14 @@
 package com.practicafinal.api.models.response;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity(name = "PR_PROYECTOS")
 @Table(name = "PR_PROYECTOS")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Proyecto {
 
     @Id

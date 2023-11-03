@@ -14,19 +14,19 @@ const routes = [
     path: '/empleados',
     name: 'empleados',
     // lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "empleados" */ '../views/EmpleadosView.vue')
   },
   {
     path: '/proyectos',
     name: 'proyectos',
     // lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "proyectos" */ '../views/ProyectosView.vue')
   },
   {
     path: '/analisis',
     name: 'analisis',
     // lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "analisis" */ '../views/AnalisisView.vue')
   }
 ]
 

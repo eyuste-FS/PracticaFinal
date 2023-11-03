@@ -15,7 +15,7 @@ new Vue({
 
 Vue.mixin({
     data() {return{
-        baseUrl: 'localhost:8080/',
+        apiBaseUrl: 'localhost:8080/',
     };},
     methods: {
     },

@@ -12,3 +12,11 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.mixin({
+    data() {return{
+        baseUrl: 'localhost:8080/',
+    };},
+    methods: {
+    },
+});

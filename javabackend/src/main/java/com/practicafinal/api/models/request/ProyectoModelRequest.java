@@ -1,12 +1,14 @@
 package com.practicafinal.api.models.request;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class ProyectoModelRequest {
 
     @NotNull
+    @Size(min = 1, max = 125)
     private String descripcion;
 
     @NotNull
@@ -15,9 +17,11 @@ public class ProyectoModelRequest {
     private LocalDate fechaFinal;
 
     @NotNull
+    @Size(min = 1, max = 30)
     private String lugar;
 
     @NotNull
+    @Size(min = 1, max = 300)
     private String observaciones;
 
     public ProyectoModelRequest() {

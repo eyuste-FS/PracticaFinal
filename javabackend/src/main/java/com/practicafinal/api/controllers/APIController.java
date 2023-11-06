@@ -172,7 +172,7 @@ public class APIController {
      * */
 
     @PutMapping(path = "/empleado")
-    public ResponseEntity<Empleado> putEmpleado(
+    public ResponseEntity<String> putEmpleado(
             @Validated @RequestBody EmpleadoModelRequest empleadoModelRequest) {
 
         char edoCivil = ' ';
@@ -182,7 +182,7 @@ public class APIController {
         } else if (edoCivilStr.equals("Soltero")) {
             edoCivil = 'S';
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("El estado civil debe ser Soltero o Casado", HttpStatus.BAD_REQUEST);
         }
 
         char sMilitar = ' ';
@@ -192,7 +192,7 @@ public class APIController {
         } else if (sMilitarStr.equals("Si")) {
             sMilitar = 'S';
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("El servicio militar debe ser Si o No", HttpStatus.BAD_REQUEST);
         }
 
         Empleado nuevoEmpleado = new Empleado(
@@ -212,14 +212,14 @@ public class APIController {
         try {
             empleadoRepository.save(nuevoEmpleado);
         } catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>("No se pudo dar de alta al empleado por un conflicto", HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(nuevoEmpleado, HttpStatus.OK);
+        return new ResponseEntity<>(nuevoEmpleado.toString(), HttpStatus.OK);
     }
 
     @PutMapping(path = "/proyecto")
-    public ResponseEntity<Proyecto> putProyecto(
+    public ResponseEntity<String> putProyecto(
             @Validated @RequestBody ProyectoModelRequest proyectoModelRequest) {
 
         Proyecto nuevoProyecto = new Proyecto(
@@ -233,10 +233,10 @@ public class APIController {
         try {
             proyectoRepository.save(nuevoProyecto);
         } catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>("No se pudo dar de alta al proyecto por un conflicto", HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(nuevoProyecto, HttpStatus.OK);
+        return new ResponseEntity<>(nuevoProyecto.toString(), HttpStatus.OK);
     }
 
     /*

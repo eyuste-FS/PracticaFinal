@@ -15,7 +15,7 @@ public class Empleado {
     @Column(name = "ID_EMPLEADO", nullable = false, updatable = false, columnDefinition = "INT(7)")
     private Long idEmpleado;
 
-    @Column(name = "TX_NIF", columnDefinition = "VARCHAR(9)")
+    @Column(name = "TX_NIF", columnDefinition = "VARCHAR(20)")
     private String txNif;
 
     @Column(name = "TX_NOMBRE", columnDefinition = "VARCHAR(30)", nullable = false)

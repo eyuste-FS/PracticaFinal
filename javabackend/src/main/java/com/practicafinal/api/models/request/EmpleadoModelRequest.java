@@ -1,28 +1,36 @@
 package com.practicafinal.api.models.request;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class EmpleadoModelRequest {
 
     @NotNull
+    @Size(min = 1, max = 20)
     private String nif;
     @NotNull
+    @Size(min = 1, max = 30)
     private String nombre;
     @NotNull
+    @Size(min = 1, max = 40)
     private String primerApellido;
     @NotNull
+    @Size(min = 1, max = 40)
     private String segundoApellido;
     @NotNull
     private LocalDate fechaNacimiento;
     @NotNull
     private LocalDate fechaAlta;
     @NotNull
+    @Size(min = 1, max = 12)
     private String telefono1;
     @NotNull
+    @Size(min = 1, max = 12)
     private String telefono2;
     @NotNull
+    @Size(min = 1, max = 40)
     private String email;
     @NotNull
     private String estadoCivil;

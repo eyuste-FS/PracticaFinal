@@ -3,7 +3,9 @@
     <v-btn @click="$router.back()">
         <span class="mdi mdi-arrow-left"></span>
     </v-btn>
-
+    <h2>
+        Alta de empleado
+    </h2>
     <v-form>
 
         <v-col>

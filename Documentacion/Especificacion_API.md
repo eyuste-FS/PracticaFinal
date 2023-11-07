@@ -17,10 +17,10 @@ Erik Yuste
 
 - proyecto/[proyecto_id]/empleado/
     - Lista de empleados.
-    - Incluye una columna booleana "Asignado" si el empleado está asignado al proyecto
     - Retorna una lista de elementos con los atributos:
         - idProyecto
         - fAlta
+        - asignado
         - empleado
             - idEmpleado
             - txNif

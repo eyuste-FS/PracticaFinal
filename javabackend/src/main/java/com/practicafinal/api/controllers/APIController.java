@@ -75,13 +75,25 @@ public class APIController {
 
         Proyecto proyecto = proyectoRepository.getReferenceById(proyecto_id);
         List<EmpleadosProyecto> empleadosProyecto = empleadosProyectoRepository.getAsignacionProyecto(proyecto);
-
-        List<AsignacionEmpleadoProyecto> asignacionEmpleadoProyectos = empleadosProyecto
+        List<AsignacionEmpleadoProyecto> asignacionEmpleadoProyecto = empleadosProyecto
                 .stream()
                 .map(AsignacionEmpleadoProyecto::new)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(asignacionEmpleadoProyectos, HttpStatus.OK);
+        List<Empleado> empleadosNoProyecto = empleadoRepository.getEmpleadosNotIn(
+                asignacionEmpleadoProyecto
+                        .stream()
+                        .map(AsignacionEmpleadoProyecto::getEmpleado)
+                        .collect(Collectors.toList()));
+        List<AsignacionEmpleadoProyecto> noAsignacionEmpleadoProyecto = empleadosNoProyecto
+                .stream()
+                .map(empleado -> {
+                    return new AsignacionEmpleadoProyecto(empleado, null, proyecto_id, false);
+                })
+                .collect(Collectors.toList());
+        asignacionEmpleadoProyecto.addAll(noAsignacionEmpleadoProyecto);
+
+        return new ResponseEntity<>(asignacionEmpleadoProyecto, HttpStatus.OK);
     }
 
     /*

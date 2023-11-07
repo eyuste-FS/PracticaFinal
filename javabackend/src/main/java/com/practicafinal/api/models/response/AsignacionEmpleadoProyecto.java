@@ -10,17 +10,21 @@ public class AsignacionEmpleadoProyecto {
 
     private Long idProyecto;
 
+    private boolean asignado;
+
 
     public AsignacionEmpleadoProyecto(EmpleadosProyecto empleadosProyecto) {
         this.empleado = empleadosProyecto.getEmpleadosProyectoId().getIdEmpleado();
         this.fAlta = empleadosProyecto.getfAlta();
         this.idProyecto = empleadosProyecto.getEmpleadosProyectoId().getIdProyecto().getIdProyecto();
+        this.asignado = true;
     }
 
-    public AsignacionEmpleadoProyecto(Empleado empleado, LocalDate fAlta, Long idProyecto) {
+    public AsignacionEmpleadoProyecto(Empleado empleado, LocalDate fAlta, Long idProyecto, boolean asignado) {
         this.empleado = empleado;
         this.fAlta = fAlta;
         this.idProyecto = idProyecto;
+        this.asignado = asignado;
     }
 
     public Empleado getEmpleado() {
@@ -45,5 +49,13 @@ public class AsignacionEmpleadoProyecto {
 
     public void setIdProyecto(Long idProyecto) {
         this.idProyecto = idProyecto;
+    }
+
+    public boolean isAsignado() {
+        return asignado;
+    }
+
+    public void setAsignado(boolean asignado) {
+        this.asignado = asignado;
     }
 }

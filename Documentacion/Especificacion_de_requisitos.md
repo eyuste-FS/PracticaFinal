@@ -126,11 +126,13 @@ Erik Yuste
         - 2.4.2.2 Los empleados que estén asociados al proyecto seleccionado (existe un registro empleado/proyecto) tendrán un check.
         - 2.4.2.3 Al deschequear el registro, se elimina el registro empleado/proyecto de la BBDD.
         - 2.4.2.4 Al chequear el registro, se inserta en la BBDD el regstro empleado/proyecto con la fecha de alta.
-    
+        - Los cambios de los chequeos y deschequeos se harán efectivos al pulsar un botón Aceptar
+        - Se restaurará el estado previo de los checks pulsando un botón Cancelar
+
     - 2.4.3 Al seleccionar otro proyecto, se refresca el bloque de empleados con la información asociada a este.
 
 ## 3 Análisis de datos
-- Se deberán leer las tablas de Empleados y Proyectos en dos dataframes con la librería Pandas. 
+- Se deberán leer las tablas de Empleados y Proyectos en dos dataframes con la librería Pandas.
 - A continuación se deberán mostrar los siguientes indicadores mediante la representación gráfica que mejor describan la información:
 
 - 3.1 Empleados
@@ -149,10 +151,10 @@ Erik Yuste
     - 3.2.2 Distribución de la duración de los proyectos (histograma)
     - 3.2.3 Distribución de proyectos por lugar
     - 3.2.4 Proyectos y Empleados
-    - 3.2.5 Distribución del número de proyectos a los que están asignados los empleados en activo. 
-        - Ejemplo: 
-            - Personas asignadas a 1 proyecto: 54 
+    - 3.2.5 Distribución del número de proyectos a los que están asignados los empleados en activo.
+        - Ejemplo:
+            - Personas asignadas a 1 proyecto: 54
             - Personas asignadas a 2 proyectos: 12
             - Personas asignadas a 3 proyectos: 2
     - 3.2.6 Top 5 proyectos con más personas asignadas
-    - 3.2.7 Lista de proyectos sin personas asignadas (detección de anomalía) 
+    - 3.2.7 Lista de proyectos sin personas asignadas (detección de anomalía)

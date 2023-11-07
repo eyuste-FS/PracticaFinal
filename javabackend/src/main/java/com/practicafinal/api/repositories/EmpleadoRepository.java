@@ -15,4 +15,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
 
     @Query(value = "select e from EM_EMPLEADOS e where e not in ?1 and e.fBaja is NULL")
     List<Empleado> getEmpleadosNotIn(List<Empleado> empleados);
+
+    @Query(value = "select e from EM_EMPLEADOS e where e.fBaja is NULL")
+    List<Empleado> getAllEmpleados();
 }

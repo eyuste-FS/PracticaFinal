@@ -10,10 +10,12 @@ Erik Yuste
 - empleado/
     - Con paginación (?page=N)
     - Exclusivamente aquellos sin fecha de baja
+    - Si no se incluye el parametro page se retornan todos
 
 - proyecto/
     - Con paginación (?page=N)
     - Exclusivamente aquellos sin fecha de baja
+    - Si no se incluye el parametro page se retornan todos
 
 - proyecto/[proyecto_id]/empleado/
     - Lista de empleados.

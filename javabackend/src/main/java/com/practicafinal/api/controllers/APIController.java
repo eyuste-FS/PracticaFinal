@@ -41,7 +41,11 @@ public class APIController {
 
     @GetMapping(path = "/empleado")
     public ResponseEntity<List<Empleado>> getEmpleadosSinBaja(
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "-1") int page) {
+
+        if (page == -1){
+            return new ResponseEntity<>(empleadoRepository.getAllEmpleados(), HttpStatus.OK);
+        }
 
         if (page < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -54,7 +58,11 @@ public class APIController {
 
     @GetMapping(path = "/proyecto")
     public ResponseEntity<List<Proyecto>> getProyectosSinBaja(
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "-1") int page) {
+
+        if (page == -1){
+            return new ResponseEntity<>(proyectoRepository.getAllProyectos(), HttpStatus.OK);
+        }
 
         if (page < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

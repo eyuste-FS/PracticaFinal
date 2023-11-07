@@ -29,6 +29,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "proyectos" */ '../views/ProyectosView.vue')
   },
   {
+    path: '/proyectos/alta',
+    name: 'altaproyecto',
+    // lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "altaproyecto" */ '../views/AltaProyectoView.vue')
+  },
+  {
+    path: '/proyectos/asignacion',
+    name: 'asignarempleados',
+    // lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "asignarempleados" */ '../views/AsignarEmpleadosView.vue')
+  },
+  {
     path: '/analisis',
     name: 'analisis',
     // lazy-loaded when the route is visited.

@@ -8,29 +8,34 @@
 
         <v-col>
         <v-row>
-            <v-text-field label="NIF" v-model="nif"></v-text-field>
+            <v-text-field
+                label="NIF" v-model="nif" 
+                min=1
+                max=20
+                ></v-text-field>
             <v-spacer></v-spacer>
         </v-row>
         <v-row>
-            <v-text-field label="Nombre" v-model="nombre"></v-text-field>
-            <br>
-            <v-text-field label="Primer apellido" v-model="primerApellido"></v-text-field>
-            <v-text-field label="Segundo apellido" v-model="segundoApellido"></v-text-field>
+            <v-col>
+            <v-text-field label="Nombre" v-model="nombre" min=1 max=30></v-text-field>
+            <v-text-field label="Primer apellido" v-model="primerApellido" min=1 max=40></v-text-field>
+            <v-text-field label="Segundo apellido" v-model="segundoApellido" min=1 max=40></v-text-field>
+            </v-col>
+            <v-col>
+            <v-text-field label="Primer teléfono de contacto" v-model="telefono1" min=1 max=12></v-text-field>
+            <v-text-field label="Segundo teléfono de contacto" v-model="telefono2" min=1 max=12></v-text-field>
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
         </v-row>
 
         <v-row>
-            <v-text-field label="Primer teléfono de contacto" v-model="telefono1"></v-text-field>
-            <v-spacer></v-spacer>
-            <v-text-field label="Segundo teléfono de contacto" v-model="telefono2"></v-text-field>
-            <v-spacer></v-spacer>
-        </v-row>
-
-        <v-row>
-            <v-text-field label="Email" v-model="email"></v-text-field>
+            <v-text-field label="Email" v-model="email" min=5 max=40></v-text-field>
             <v-spacer></v-spacer><v-spacer></v-spacer>
         </v-row>
 
-        <v-row>        
+        <v-row>
+            <v-col>
             <v-select
                 v-model="estadoCivil"
                 :items="['Soltero', 'Casado']"
@@ -40,7 +45,6 @@
                 single-line
                 >
             </v-select>
-            <v-spacer></v-spacer>
             <v-select
                 v-model="servicioMilitar"
                 :items="['No', 'Si']"
@@ -50,22 +54,24 @@
                 single-line
                 >
             </v-select>
+            </v-col>
+            <v-spacer></v-spacer>
             <v-spacer></v-spacer>
         </v-row>
 
         <v-row>
             <v-col>
                 <h4>Fecha de nacimiento</h4>
-                <v-date-picker v-model="fechaNacimiento" > </v-date-picker>
+                <v-date-picker v-model="fechaNacimiento" elevation="10"> </v-date-picker>
             </v-col>
             <v-col>
                 <h4>Fecha de alta</h4>
-                <v-date-picker v-model="fechaAlta" > </v-date-picker>
+                <v-date-picker v-model="fechaAlta" elevation="10"> </v-date-picker>
             </v-col>
+            <v-spacer></v-spacer>
         </v-row>
 
         </v-col>
-    </v-form>
 
     <v-container style="padding: 30px; justify-content: space-between;">
         <v-row>
@@ -88,6 +94,7 @@
         </v-row>
 
       </v-container>
+    </v-form>
 
   </v-container>
 </template>
@@ -142,34 +149,35 @@ export default {
         let wrong = [];
 
         if (this.nif.length < 1) emptyfields.push('Nif');
-        else if (this.nif.length > 20) wrong.push('Nif');
+        else if (this.nif.length > 20) wrong.push('Nif demasiado largo');
         if (this.nombre < 1) emptyfields.push("Nombre");
-        else if (this.nombre.length > 30) wrong.push('Nombre');
+        else if (this.nombre.length > 30) wrong.push('Nombre demasiado largo');
         if (this.primerApellido < 1) emptyfields.push("1º Apellido");
-        else if (this.primerApellido.length > 40) wrong.push('1º Apellido');
+        else if (this.primerApellido.length > 40) wrong.push('1º Apellido demasiado largo');
         if (this.segundoApellido < 1) emptyfields.push("2º Apellido");
-        else if (this.segundoApellido.length > 40) wrong.push('2º Apellido');
+        else if (this.segundoApellido.length > 40) wrong.push('2º Apellido demasiado largo');
         
         if (this.fechaNacimiento < 1) emptyfields.push("Fecha de nacimiento");
-        else if (!fechaRe.test(this.fechaNacimiento)) wrong.push("Fecha de nacimiento");
+        else if (!fechaRe.test(this.fechaNacimiento)) wrong.push("Fecha de nacimiento: formato incorrecto");
         
         if (this.fechaAlta < 1) emptyfields.push("Fecha de alta");
-        else if (!fechaRe.test(this.fechaAlta)) wrong.push("Fecha de alta");
+        else if (!fechaRe.test(this.fechaAlta)) wrong.push("Fecha de alta: formato incorrecto");
         
         if (this.telefono1 < 1) emptyfields.push("1º Teléfono");
-        else if (!telefonoRe.test(this.telefono1)) wrong.push("1º Teléfono");
+        else if (!telefonoRe.test(this.telefono1)) wrong.push("1º Teléfono: formato incorrecto");
 
         if (this.telefono2 < 1) emptyfields.push("2º Teléfono");
-        else if (!telefonoRe.test(this.telefono2)) wrong.push("1º Teléfono");
+        else if (!telefonoRe.test(this.telefono2)) wrong.push("1º Teléfono: formato incorrecto");
         
         if (this.email < 1) emptyfields.push("Email");
-        else if (!emailRe.test(this.email) || this.email.length > 40) wrong.push("Email");
+        else if (!emailRe.test(this.email)) wrong.push("Email: formato incorrecto");
+        else if (this.email.length > 40) wrong.push("Email: demasiado largo")
 
         if (this.estadoCivil < 1) emptyfields.push("Estado civil");
-        else if (this.estadoCivil != "Casado" && this.estadoCivil != "Soltero") wrong.push("Estado civil");
+        else if (this.estadoCivil != "Casado" && this.estadoCivil != "Soltero") wrong.push("Estado civil fuera de rango");
 
         if (this.servicioMilitar < 1) emptyfields.push("Servicio militar");
-        else if (this.servicioMilitar != "Si" && this.servicioMilitar != "No") wrong.push("Servicio militar");
+        else if (this.servicioMilitar != "Si" && this.servicioMilitar != "No") wrong.push("Servicio militar fuera de rango");
 
         return [emptyfields, wrong];
     },

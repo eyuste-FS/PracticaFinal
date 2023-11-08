@@ -101,6 +101,13 @@ public class APIController {
                 .collect(Collectors.toList());
         asignacionEmpleadoProyecto.addAll(noAsignacionEmpleadoProyecto);
 
+        if(asignacionEmpleadoProyecto.size() < 1){
+            asignacionEmpleadoProyecto.addAll(
+                    empleadoRepository.getAllEmpleados().stream().map(e->{
+                        return new AsignacionEmpleadoProyecto(e, null, proyecto_id, false);
+                    }).collect(Collectors.toList()));
+        }
+
         return new ResponseEntity<>(asignacionEmpleadoProyecto, HttpStatus.OK);
     }
 

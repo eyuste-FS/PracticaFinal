@@ -9,7 +9,7 @@ mvn install
 ```
 
 ### Run
-Make sure a MySQL server is running at the designated port.
+Make sure a MySQL server is running at the designated port (3306).
 ```
 java -jar  .\target\api-*-SNAPSHOT.jar
 ```

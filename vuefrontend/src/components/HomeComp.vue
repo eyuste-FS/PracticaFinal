@@ -31,13 +31,7 @@ export default {
         desc: "Página de gestión de proyectos",
         name:"proyectos",
         icon: "mdi mdi-file-document-multiple",
-      },
-      {
-        title: "Análisis",
-        desc: "Página de visualización de análisis de datos",
-        name:"analisis",
-        icon: "mdi mdi-trending-up ",
-      },
+      }
     ],
   }),
 };

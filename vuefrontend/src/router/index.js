@@ -39,12 +39,6 @@ const routes = [
     name: 'asignarempleados',
     // lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "asignarempleados" */ '../views/AsignarEmpleadosView.vue')
-  },
-  {
-    path: '/analisis',
-    name: 'analisis',
-    // lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "analisis" */ '../views/AnalisisView.vue')
   }
 ]
 

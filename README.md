@@ -40,5 +40,28 @@ npm run build
 npm run lint
 ```
 
-#### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## How to start the proyect
+
+DB server:
+
+Start mysql server
+
+
+Backend server:
+
+```
+cd .\javabackend\
+mvn install
+java -jar .\target\api-0.0.1-SNAPSHOT.jar
+```
+
+Frontend server:
+
+```
+cd .\vuefrontend\
+npm run serve -- --port 8081
+```
+
+Acceder desde el navegador:
+```http://localhost:8081/```
+

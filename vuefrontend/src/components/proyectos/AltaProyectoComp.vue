@@ -28,6 +28,10 @@
             <h4>Fecha de inicio</h4>
             <v-date-picker v-model="fechaInicio" elevation="10" :min="today"> </v-date-picker>
         </v-col>
+        <v-col>
+            <h4>Fecha de finalización</h4>
+            <v-date-picker v-model="fechaFinal" elevation="10" :min="today"> </v-date-picker>
+        </v-col>
       </v-row>
       <br>
 
@@ -68,12 +72,14 @@ export default {
   data: () => ({
     descripcion: "",
     fechaInicio: "",
+    fechaFinal: "",
     lugar: "",  // 30
     observaciones: "",  // 300
 
     max: {
       descripcion: 125,
       fechaInicio: 10,
+      fechaFinal: 10,
       lugar: 30,
       observaciones: 300,
     },
@@ -81,6 +87,7 @@ export default {
     min: {
       descripcion: 1,
       fechaInicio: 10,
+      fechaFinal: 10,
       lugar: 1,
       observaciones: 1,
     },
@@ -95,6 +102,7 @@ export default {
         return {
           descripcion: this.descripcion,
           fechaInicio: this.fechaInicio,
+          fechaFinal: this.fechaFinal,
           lugar: this.lugar,
           observaciones: this.observaciones,
         };
@@ -113,7 +121,11 @@ export default {
 
         if (this.fechaInicio.length < this.min.fechaInicio) emptyfields.push("Fecha de incio");
         else if (!fechaRe.test(this.fechaInicio)) wrong.push("Fecha de inicio: formato incorrecto");
-        
+
+        if (this.fechaFinal.length < this.min.fechaFinal) emptyfields.push("Fecha de finalización");
+        else if (!fechaRe.test(this.fechaFinal)) wrong.push("Fecha de finalización: formato incorrecto");
+        else if (this.fechaInicio > this.fechaFinal) wrong.push("La fecha de finalización debe ser posterior a la de inicio");
+
         if (this.lugar.length < this.min.lugar) emptyfields.push("Lugar");
         else if (this.lugar.length > this.max.lugar) wrong.push("Lugar: demasiado largo")
 
@@ -158,10 +170,14 @@ export default {
                 })
             })
             .catch(resp => {
+                let msg = resp;
+                if (msg.response) msg = msg.response;
+                if (msg.data) msg = msg.data;
+                if (msg.error) msg = msg.error;
                 console.log(resp)
                 Swal.fire({
                     titleText: "Error",
-                    html: resp,
+                    html: msg,
                     icon: "error",
                 })
             });
@@ -185,8 +201,8 @@ export default {
 Esperado por el PUT {
   "descripcion": "Test description",  // 125
   "fechaInicio": "2023-11-03",
+  "fechaFinal": "2024-04-17",
   "lugar": "Madrid",  // 30
   "observaciones": "Ninguna"  // 300
 }
-12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345
 -->

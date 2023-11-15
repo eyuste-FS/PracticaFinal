@@ -252,6 +252,10 @@ export default {
                 })
             })
             .catch(resp => {
+                let msg = resp;
+                if (msg.response) msg = msg.response;
+                if (msg.data) msg = msg.data;
+                if (msg.error) msg = msg.error;
                 console.log(resp)
                 Swal.fire({
                     titleText: "Error",

@@ -69,8 +69,8 @@ Erik Yuste
     - Crea un nuevo proyecto (y le da de alta con la fecha del sistema)
     - Cuerpo (todos de tipo string):
         - descripcion
-        - fecha_inicio
-        - fecha_final (opcional)
+        - fechaInicio
+        - fechaFinal
         - lugar
         - observaciones
 

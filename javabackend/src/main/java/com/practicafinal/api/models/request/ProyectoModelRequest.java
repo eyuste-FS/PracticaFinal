@@ -14,6 +14,7 @@ public class ProyectoModelRequest {
     @NotNull
     private LocalDate fechaInicio;
 
+    @NotNull
     private LocalDate fechaFinal;
 
     @NotNull
